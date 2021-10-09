@@ -2,85 +2,96 @@ import React from "react";
 import Container from "../Container";
 import Button from "../Inputs/Button";
 import Number from "../Inputs/Number";
-import Fetch from "../lib/Network";
+import Fetch from "../../lib/Network";
+
+const STEP_SIZE = 5;
 
 interface Props {
   displayName: string;
-  deviceName: string[];
+  deviceID: string;
 }
 
-const applyDirection = (name: string[]) => {
-  return {
-    command: "direction",
-    trains: name,
-    value: 0,
-  };
-};
-
-const applyBrakes = (name: string[]) => {
-  return {
-    command: "brake",
-    trains: name,
-    value: 0,
-  };
-};
-
-const applyPower = (name: string[], power: number) => {
-  return {
-    command: "power",
-    trains: name,
-    value: power,
-  };
-};
-
 const Controller: React.FC<Props> = (props) => {
-  const [power, updatePowerValue] = React.useState(20);
-  const { displayName, deviceName } = props;
-  const updatePower = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updatePowerValue(parseInt(e.target.value, 10));
-    handlePower();
-  };
-  const handlePower = () => {
-    new Fetch("http://localhost:5000/execute")
+  const [power, updatePowerValue] = React.useState(0);
+  const [direction, changeDirection] = React.useState("Forwards");
+  const { displayName, deviceID } = props;
+  const handlePower = (adjustment: number) => {
+    new Fetch(`execute/${deviceID}`)
       .setMethod("POST")
       .addHeader("Content-Type", "application/json")
-      .setBody(applyPower(deviceName, power))
+      .setBody({
+        command: {
+          name: "set_power",
+          args: {
+            adjustment: adjustment,
+          },
+        },
+      })
       .fetch()
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        updatePowerValue(res.power);
+      })
       .catch((err) => console.log(err));
   };
   const handleBrake = () => {
-    new Fetch("http://localhost:5000/execute")
+    updatePowerValue(0);
+    new Fetch(`execute/${deviceID}`)
       .setMethod("POST")
       .addHeader("Content-Type", "application/json")
-      .setBody(applyBrakes(deviceName))
+      .setBody({
+        command: { name: "stop" },
+      })
       .fetch()
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        updatePowerValue(res.power);
+      })
       .catch((err) => console.log(err));
   };
   const handleDirection = () => {
-    new Fetch("http://localhost:5000/execute")
+    new Fetch(`execute/${deviceID}`)
       .setMethod("POST")
       .addHeader("Content-Type", "application/json")
-      .setBody(applyDirection(deviceName))
+      .setBody({
+        command: { name: "change_direction" },
+      })
       .fetch()
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        changeDirection(res.direction === -1 ? "Backwards" : "Forwards");
+        updatePowerValue(res.power);
+      })
       .catch((err) => console.log(err));
   };
 
   return (
-    <Container>
-      <h1>{displayName}</h1>
-      <Button color='green' onClick={() => handlePower()}>
-        GO
-      </Button>
-      <Number value={power} onChange={updatePower} />
-      <Button color='red' onClick={() => handleBrake()}>
-        STOP
-      </Button>
-      <Button color='gray' onClick={() => handleDirection()}>
-        DIRECTION
-      </Button>
+    <Container className='controller-container'>
+      <h2>{displayName}</h2>
+      <p>I am going {direction}!</p>
+      <Container className='button-container'>
+        <Container className='joystick-container'>
+          <Container className='up-down-container'>
+            <Button
+              color='blue'
+              onClick={() => handlePower(STEP_SIZE * -1)}
+            >{`<`}</Button>
+            <p className='power-display'>{power}</p>
+            <Button
+              color='blue'
+              onClick={() => handlePower(STEP_SIZE * 1)}
+            >{`>`}</Button>
+          </Container>
+        </Container>
+        <Container className='joystick-container'>
+          <Button color='red' onClick={() => handleBrake()}>
+            STOP
+          </Button>
+          <Button color='gray' onClick={() => handleDirection()}>
+            DIRECTION
+          </Button>
+        </Container>
+      </Container>
     </Container>
   );
 };

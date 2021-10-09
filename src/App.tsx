@@ -1,20 +1,11 @@
 import React from "react";
-import Controller from "./components/Controller";
-import { TRAINS } from "./data/trains";
+import "./assets/styles/global.css";
+import MainScreen from "./screens/MainScreen";
 
 function App() {
   return (
     <div className='App'>
-      {TRAINS.map((train) => (
-        <Controller
-          displayName={train.displayName}
-          deviceName={[train.deviceName]}
-        />
-      ))}
-      <Controller
-        displayName='Master'
-        deviceName={TRAINS.map((train) => train.deviceName)}
-      />
+      <MainScreen />
     </div>
   );
 }

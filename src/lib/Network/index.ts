@@ -1,18 +1,26 @@
+import Variable from "../env";
+
 type METHOD = "POST" | "GET" | "PUT" | "DELETE";
 
 class Fetch {
   private headers: any;
   private route: string;
+  private hostname: string;
   private method: METHOD;
   private body: any;
-  public constructor(route: string) {
+  public constructor(url: string) {
+    this.hostname = new Variable({
+      test: "http://localhost:5000",
+      dev: "http://localhost:5000",
+      prod: "http://trains-api.nickzimm.me",
+    }).url();
+    this.route = url;
     this.headers = {};
-    this.body = {};
-    this.route = route;
     this.method = "GET";
     return this;
   }
   public setBody(body: any) {
+    if (!this.body) this.body = {};
     this.body = JSON.stringify(body);
     return this;
   }
@@ -25,8 +33,8 @@ class Fetch {
     return this;
   }
   public async fetch() {
-    await (
-      await fetch(this.route, {
+    return await (
+      await fetch(`${this.hostname}/${this.route}`, {
         method: this.method,
         headers: this.headers,
         body: this.body,
