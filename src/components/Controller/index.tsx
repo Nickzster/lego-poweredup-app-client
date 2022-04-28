@@ -1,22 +1,35 @@
 import React from "react";
 import Container from "../Container";
 import Button from "../Inputs/Button";
-import Number from "../Inputs/Number";
-import Fetch from "../../lib/Network";
 import PUClient from "../../lib/PUClient";
 
 const STEP_SIZE = 5;
 
-interface Props {
-  displayName: string;
-  deviceID: string;
-  power: number;
-  direction: string;
+interface IMotorArray {
+  metadata: {
+    id: string;
+    name: string;
+    type: string;
+  };
+  state: {
+    color: string;
+    direction: number;
+    power: number;
+  };
+}
+
+interface IControllerProps {
+  remoteKey: string;
+  value: IMotorArray[];
   client: PUClient;
 }
 
-const Controller: React.FC<Props> = (props) => {
-  const { displayName, deviceID, power, direction, client } = props;
+const Controller: React.FC<IControllerProps> = (props) => {
+  const { remoteKey, value, client } = props;
+
+  const displayName = remoteKey;
+  const direction = "REPLACE_ME";
+  const remoteID = remoteKey;
 
   return (
     <Container className='controller-container'>
@@ -27,20 +40,20 @@ const Controller: React.FC<Props> = (props) => {
           <Container className='up-down-container'>
             <Button
               color='blue'
-              onClick={() => client.decreasePower(deviceID, STEP_SIZE)}
+              onClick={() => client.decreasePower(remoteID, STEP_SIZE)}
             >{`<`}</Button>
-            <p className='power-display'>{power}</p>
+            <p className='power-display'>{-9999}</p>
             <Button
               color='blue'
-              onClick={() => client.increasePower(deviceID, STEP_SIZE)}
+              onClick={() => client.increasePower(remoteID, STEP_SIZE)}
             >{`>`}</Button>
           </Container>
         </Container>
         <Container className='joystick-container'>
-          <Button color='red' onClick={() => client.brake(deviceID)}>
+          <Button color='red' onClick={() => client.brake(remoteID)}>
             STOP
           </Button>
-          <Button color='gray' onClick={() => client.changeDirection(deviceID)}>
+          <Button color='gray' onClick={() => client.changeDirection(remoteID)}>
             DIRECTION
           </Button>
         </Container>
