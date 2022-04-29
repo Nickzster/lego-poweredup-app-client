@@ -1,0 +1,36 @@
+.container {
+  font-size: 1.5em;
+  padding: 1em;
+  background-color: #e8e8e8;
+  border-radius: 0.5em;
+}
+
+.container-title {
+}
+
+.container-singlemotor {
+  border-bottom: 1px solid black;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+
+.container-meta {
+  display: flex;
+  flex-direction: row;
+}
+
+.container-meta p {
+  margin-left: 1em;
+}
+.container-meta p:nth-child(1) {
+  margin-left: 0;
+}
+
+.container-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.container-buttons div {
+  margin: 0.2em;
+}

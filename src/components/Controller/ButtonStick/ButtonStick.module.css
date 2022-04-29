@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  flex-direction: row-reverse;
+  max-width: auto;
+  align-items: left;
+  justify-content: center;
+  margin: 1em;
+}
+
+.stickbutton-container {
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  padding: 0.2em;
+  user-select: none;
+  max-width: 50px;
+  min-width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 3em;
+}
+
+.stickbutton-container:hover {
+  cursor: pointer;
+  background-color: lightgray;
+}
+
+.stickbutton-container:active {
+  background-color: darkgrey;
+}
+
+.power-button {
+  background-color: #27187e;
+  color: white;
+}
+.power-button:hover {
+  background-color: #1b105c;
+  color: white;
+}
+.power-button:active {
+  background-color: #412bc3;
+  color: white;
+}
+
+.brake {
+  background-color: #ff8600;
+  color: black;
+}
+
+.brake:hover {
+  background-color: #e57a00;
+}
+
+.brake:active {
+  background-color: #fe951c;
+}

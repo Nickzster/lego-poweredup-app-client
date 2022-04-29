@@ -1,10 +1,16 @@
-import React from "react";
-import "./assets/styles/global.css";
 import MainScreen from "./screens/MainScreen";
 
 function App() {
   return (
-    <div className='App'>
+    <div
+      className='App'
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <MainScreen />
     </div>
   );

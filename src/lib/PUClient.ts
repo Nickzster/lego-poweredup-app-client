@@ -8,7 +8,7 @@ export enum COMMANDS {
 type ClientEvents =
   | "EXECUTE_MOTOR_COMMAND"
   | "GET_ALL_ACTIVE_REMOTES"
-  | "ASSIGN_MOTOR_TO_REMOTE";
+  | "ROTATE_MOTOR_TO_NEW_REMOTE";
 
 type Error = "ERROR";
 
@@ -89,18 +89,28 @@ class PUClient {
     });
   }
 
-  public changeDirection(remoteID: string) {
+  public changeDirection(remoteID: string, motorID: string) {
     this.send({
       type: "EXECUTE_MOTOR_COMMAND",
       remoteID,
+      motorID,
       payload: {
-        name: COMMANDS.INCREASE_POWER,
+        name: COMMANDS.CHANGE_MOTOR_DIRECTION,
       },
     });
   }
 
   public getAllRemotes() {
     this.send({ type: "GET_ALL_ACTIVE_REMOTES", payload: {} });
+  }
+
+  public rotateMotorToNewRemote(oldRemoteID: string, motorID: string) {
+    this.send({
+      type: "ROTATE_MOTOR_TO_NEW_REMOTE",
+      remoteID: oldRemoteID,
+      motorID,
+      payload: {},
+    });
   }
 }
 

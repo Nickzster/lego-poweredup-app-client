@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Container from "../components/Container";
 import Controller from "../components/Controller";
 import PUClient from "../lib/PUClient";
+import style from "./MainScreen.module.css";
 
 const MainScreen = () => {
   const client = new PUClient();
@@ -19,7 +20,7 @@ const MainScreen = () => {
   }, []);
 
   return (
-    <>
+    <div className={style.container}>
       <h1>LEGO Powered Up</h1>
       <br />
       <Container className='generic-container'>
@@ -31,7 +32,7 @@ const MainScreen = () => {
           />
         ))}
       </Container>
-    </>
+    </div>
   );
 };
 
