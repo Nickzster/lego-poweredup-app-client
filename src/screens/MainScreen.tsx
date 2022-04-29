@@ -29,6 +29,7 @@ const MainScreen = () => {
             remoteKey={remote.key}
             value={remote.value}
             client={client}
+            color={remote.color}
           />
         ))}
       </Container>
